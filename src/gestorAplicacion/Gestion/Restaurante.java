@@ -3,7 +3,7 @@ package gestorAplicacion.Gestion;
 import gestorAplicacion.Entorno.Casilla;
 import gestorAplicacion.Entorno.Ciudad;
 import gestorAplicacion.Entorno.Zona;
-import gestorAplicacion.Usuario.Cliente;
+import gestorAplicacion.Personas.Cliente;
 
 import java.util.ArrayList;
 import java.util.Scanner;
