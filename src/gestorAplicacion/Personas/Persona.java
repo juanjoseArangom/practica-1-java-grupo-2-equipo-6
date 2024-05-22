@@ -15,5 +15,5 @@ public abstract class Persona {
     }
 
     // Getters
-    public abstract void tilina();
+    public abstract void tilin();
 }
