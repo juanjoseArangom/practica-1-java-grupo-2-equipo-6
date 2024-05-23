@@ -1,7 +1,12 @@
 package gestorAplicacion.Gestion;
 
+import gestorAplicacion.Personas.Cliente;
+
+import java.util.ArrayList;
+
 public class Factura {
     //  Atributos
+    private Cliente cliente;
     private static int numeroFactura = 0;
     private int valor = 0;
     private String metodoPago;
@@ -13,6 +18,7 @@ public class Factura {
 
     // Constructores
     public Factura(){};
+
     public Factura(Pedido pedido, String metodoPago, boolean pagoPreconsumo, int propina){
         this.pedido = pedido;
         this.metodoPago = metodoPago;
@@ -22,7 +28,20 @@ public class Factura {
         numeroFactura++;
     }
 
+    public Factura(int valor, int propina, boolean pagada){
+        this.valor = valor;
+        this.propina = propina;
+        this.pagada = pagada;
+    }
+
     // Metodos
+    public static Factura crearFacturaUnificada(ArrayList<Factura> facturas){
+        int valor = 0;
+        for (Factura factura : facturas) {
+            valor += factura.getValor();
+        }
+        return new Factura(valor, 0, false);
+    }
     public void pagar(){
         this.pagada = true;
     }
@@ -64,5 +83,20 @@ public class Factura {
     }
     public static int getNumeroFactura(){
         return numeroFactura;
+    }
+    public static void setNumeroFactura(int numeroFactura){
+        Factura.numeroFactura = numeroFactura;
+    }
+
+    public void calcularValor(){
+        int valor = 0;
+        for (Plato plato : pedido.getPlatos()){
+            valor += plato.getPrecio();
+        }
+        if (pagoPreconsumo){
+            valor += (int) (valor * 0.19);
+        }
+        valor += propina;
+        this.valor = valor;
     }
 }

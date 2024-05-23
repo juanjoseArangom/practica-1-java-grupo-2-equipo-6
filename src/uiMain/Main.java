@@ -1,9 +1,8 @@
 package uiMain;
 
-import gestorAplicacion.Entorno.Ciudad;
-import gestorAplicacion.Gestion.Factura;
-import gestorAplicacion.Gestion.Restaurante;
-import gestorAplicacion.Entorno.Zona;
+import gestorAplicacion.Gestion.*;
+import gestorAplicacion.Entorno.*;
+import gestorAplicacion.Personas.*;
 
 import java.util.*;
 
@@ -134,7 +133,7 @@ public class Main {
         boolean encendido = true;
         do {
             System.out.println("""
-                    ¿Desea dejar el restaurante?
+                    ¿Algín cliente desea dejar el restaurante?
                     1. Sí.
                     2. No.
                     Escriba un número para elegir su opción.""");
@@ -142,7 +141,23 @@ public class Main {
             switch (eleccion) {
                 case 1:
                     limpiarPantalla();
-                    System.out.println("Interacción 3.");
+                    System.out.println("Ingrese el número de la mesa que va a dejar el restaurante");
+                    int numeroMesa = readInt();
+                    for (Mesa mesas : Restaurante.mesas){
+                        if (mesas.getNumMesa() == numeroMesa){
+                            cobrarFactura(mesas);
+                            break;
+                        }
+                        else {
+                            System.out.println("No se encontró la mesa.");
+                        }
+                        menuPrincipal();
+                    }
+
+
+
+
+
                     encendido = false;
                     break;
                 case 2:
@@ -160,10 +175,12 @@ public class Main {
 
     // Interacción 1: cobrarFactura
 
-    public static void cobrarFactura(Factura factura) {
+    public static void cobrarFactura(Mesa mesa) {
         boolean encendido = true;
         do {
-            System.out.println("El valor de la factura es: " + factura.getValor());
+            System.out.println("Interacción 1.");
+            int valorFactura = mesa.getFacturaUnificada().getValor();
+            System.out.println("El valor de la factura es: " + valorFactura);
             System.out.println("""
                     ¿Desea agregar propina?
                     1. Sí.
@@ -174,14 +191,13 @@ public class Main {
                 case 1:
                     System.out.println("Por favor ingrese el valor de la propina.");
                     int propina = readInt();
-                    factura.setPropina(propina);
-                    factura.setValor(factura.getValor() + propina);
-                    factura.pagar();
-                    System.out.println("La factura ha sido pagada con éxito.");
+                    mesa.getFacturaUnificada().setPropina(propina);
+                    mesa.getFacturaUnificada().setValor(mesa.getFacturaUnificada().getValor() + propina);
+                    System.out.println("El valor de la factura con propina es: " + mesa.getFacturaUnificada().getValor());
+                    cobrarFactura(mesa);
                     break;
                 case 2:
-                    factura.pagar();
-                    System.out.println("La factura ha sido pagada con éxito.");
+                    cobrarFactura(mesa);
                     break;
                 default:
                     System.out.println("Número no válido.");
