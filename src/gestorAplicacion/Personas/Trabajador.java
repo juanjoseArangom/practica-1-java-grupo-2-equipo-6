@@ -16,4 +16,55 @@ public class Trabajador extends Persona{
         this.calificacion = 0;
     }
 
+    public void mostrarInformacion(){
+        System.out.println("Nombre: " + nombre);
+        System.out.println("Cedula: " + cedula);
+        System.out.println("Especialidad: " + especialidad);
+        System.out.println("Salario: " + salario);
+    }
+
+    public void setOcupado(boolean ocupado){
+        this.ocupado = ocupado;
+    }
+
+    public boolean getOcupado(){
+        return ocupado;
+    }
+
+    public void setCalificacion(float calificacion){
+        this.calificacion = calificacion;
+    }
+
+    public float getCalificacion(){
+        return calificacion;
+    }
+
+    public void addReseña(String reseña){
+        reseñas.add(reseña);
+    }
+
+    public ArrayList<String> getReseñas(){
+        return reseñas;
+    }
+
+    public String getEspecialidad(){
+        return especialidad;
+    }
+
+    public void setEspecialidad(String especialidad){
+        this.especialidad = especialidad;
+    }
+
+    public int getSalario(){
+        return salario;
+    }
+
+    public void setSalario(int salario){
+        this.salario = salario;
+    }
+
+
+
+
+
 }

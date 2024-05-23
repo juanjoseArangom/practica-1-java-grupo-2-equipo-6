@@ -14,6 +14,6 @@ public abstract class Persona {
         this.cedula = cedula;
     }
 
-    // Getters
-    public abstract void tilin();
+    // Metodo abstracto
+    public abstract void mostrarInformacion();
 }

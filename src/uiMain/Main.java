@@ -1,6 +1,7 @@
 package uiMain;
 
 import gestorAplicacion.Entorno.Ciudad;
+import gestorAplicacion.Gestion.Factura;
 import gestorAplicacion.Gestion.Restaurante;
 import gestorAplicacion.Entorno.Zona;
 
@@ -69,7 +70,8 @@ public class Main {
                     break;
                 case 3:
                     limpiarPantalla();
-                    System.out.println("Interacción 3.");
+                    dejarRestaurante();
+                    System.out.println("Funcionalidad 3.");
                     encendido = false;
                     break;
                 case 4:
@@ -124,6 +126,68 @@ public class Main {
             }
         }
         return String.valueOf(letrasIndividuales);
+    }
+
+    // Funcionalidad 3: Dejar Restaurante
+
+    public static void dejarRestaurante() {
+        boolean encendido = true;
+        do {
+            System.out.println("""
+                    ¿Desea dejar el restaurante?
+                    1. Sí.
+                    2. No.
+                    Escriba un número para elegir su opción.""");
+            int eleccion = readInt();
+            switch (eleccion) {
+                case 1:
+                    limpiarPantalla();
+                    System.out.println("Interacción 3.");
+                    encendido = false;
+                    break;
+                case 2:
+                    limpiarPantalla();
+                    menuPrincipal();
+                    encendido = false;
+                    break;
+                default:
+                    limpiarPantalla();
+                    System.out.println("Ingrese un número válido [1 - 2].");
+                    break;
+            }
+        } while (encendido);
+    }
+
+    // Interacción 1: cobrarFactura
+
+    public static void cobrarFactura(Factura factura) {
+        boolean encendido = true;
+        do {
+            System.out.println("El valor de la factura es: " + factura.getValor());
+            System.out.println("""
+                    ¿Desea agregar propina?
+                    1. Sí.
+                    2. No.
+                    Escriba un número para elegir su opción.""");
+            int eleccion = readInt();
+            switch (eleccion) {
+                case 1:
+                    System.out.println("Por favor ingrese el valor de la propina.");
+                    int propina = readInt();
+                    factura.setPropina(propina);
+                    factura.setValor(factura.getValor() + propina);
+                    factura.pagar();
+                    System.out.println("La factura ha sido pagada con éxito.");
+                    break;
+                case 2:
+                    factura.pagar();
+                    System.out.println("La factura ha sido pagada con éxito.");
+                    break;
+                default:
+                    System.out.println("Número no válido.");
+                    break;
+            }
+        } while (encendido);
     }
 
     //Funcionalidad 4: Agregar Sede
