@@ -22,6 +22,9 @@ public class Main {
         zonas.add(new Zona(7426, "Aranjuez", ciudad1));
         zonas.add(new Zona(193134, "Kennedy", ciudad2));
 
+        //Creamos mesas de muestra
+
+
         //Agregamos el nombre de las zonas al array nombreZonas
         for (Zona zona : zonas) {
             nombreZonas.add(zona.getNombre());
@@ -133,7 +136,7 @@ public class Main {
         boolean encendido = true;
         do {
             System.out.println("""
-                    ¿Algín cliente desea dejar el restaurante?
+                    ¿Algún cliente desea dejar el restaurante?
                     1. Sí.
                     2. No.
                     Escriba un número para elegir su opción.""");
@@ -153,11 +156,6 @@ public class Main {
                         }
                         menuPrincipal();
                     }
-
-
-
-
-
                     encendido = false;
                     break;
                 case 2:
@@ -194,16 +192,61 @@ public class Main {
                     mesa.getFacturaUnificada().setPropina(propina);
                     mesa.getFacturaUnificada().setValor(mesa.getFacturaUnificada().getValor() + propina);
                     System.out.println("El valor de la factura con propina es: " + mesa.getFacturaUnificada().getValor());
-                    cobrarFactura(mesa);
+
                     break;
                 case 2:
-                    cobrarFactura(mesa);
+                    ;
                     break;
                 default:
                     System.out.println("Número no válido.");
                     break;
             }
         } while (encendido);
+    }
+
+    public static void separarFactura(Mesa mesa){
+        boolean encendido = true;
+        do {
+            System.out.println("Interacción 2.");
+            System.out.println("¿Desea separar la factura?");
+            System.out.println("""
+                    1. Sí.
+                    2. No.
+                    Escriba un número para elegir su opción.""");
+            int eleccion = readInt();
+            switch (eleccion) {
+                case 1:
+                    System.out.println("Por favor ingrese el número de personas que van a pagar la factura.");
+                    int numeroPersonas = readInt();
+                    if (numeroPersonas == mesa.getClientes().size()){
+                        int valorFactura = mesa.getFacturaUnificada().getValor();
+                        int valorPorPersona = valorFactura / numeroPersonas;
+                        System.out.println("El valor por persona es: " + valorPorPersona);
+                    }
+                    else{
+                        System.out.println("Ingrese las cédulas de las personas que pagarán la factura.");
+                        ArrayList<Cliente> clientesPagadores = new ArrayList<Cliente>();
+                        for (int i = 0; i < numeroPersonas; i++){
+                            int cedula = readInt();
+                            if (cedula == mesa.getClientes().get(i).getCedula()){
+                                clientesPagadores.add(mesa.getClientes().get(i));
+                            }
+                            else {
+                                System.out.println("Cédula no válida.");
+                            }
+
+                        }
+                    }
+                    break;
+                case 2:
+                    ;
+                    break;
+                default:
+                    System.out.println("Número no válido.");
+                    break;
+            }
+
+        }
     }
 
     //Funcionalidad 4: Agregar Sede
