@@ -246,7 +246,7 @@ public class Main {
                     break;
             }
 
-        }
+        } while (encendido);
     }
 
     //Funcionalidad 4: Agregar Sede
