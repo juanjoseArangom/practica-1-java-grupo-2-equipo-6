@@ -230,6 +230,53 @@ public class Main {
                             int cedula = readInt();
                             if (cedula == mesa.getClientes().get(i).getCedula()){
                                 clientesPagadores.add(mesa.getClientes().get(i));
+                                for (Cliente cliente : clientesPagadores){
+                                    boolean encendido2 = true;
+                                    do {
+                                        System.out.println("Ingrese la cantidad que desea pagar.");
+                                        int valor = readInt();
+                                        if (valor >= mesa.getFacturaUnificada().getValor()) {
+                                            System.out.println("El valor ingresado es mayor al valor de la factura.");
+                                        } else {
+                                            mesa.getFacturaUnificada().setValor(mesa.getFacturaUnificada().getValor() - valor);
+                                            System.out.println("El valor restante de la factura es: " + mesa.getFacturaUnificada().getValor());
+                                            encendido2 = false;
+                                        }
+                                    } while(encendido2);
+                                    System.out.println("Escoja el método de pago.");
+                                    System.out.println("""
+                                            1. Efectivo.
+                                            2. Tarjeta.
+                                            3. Cheque.
+                                            4. Otro.
+                                            Escriba un número para elegir su opción.""");
+                                    int metodoPago = readInt();
+                                    ArrayList<String> metodosPago = new ArrayList<String>();
+                                    switch (metodoPago) {
+                                        case 1:
+                                            mesa.getFacturaUnificada().setMetodoPago("Efectivo");
+                                            metodosPago.add("Efectivo");
+                                            break;
+                                        case 2:
+                                            cliente.getFactura().setMetodoPago("Tarjeta");
+                                            metodosPago.add("Tarjeta");
+                                            break;
+                                        case 3:
+                                            cliente.getFactura().setMetodoPago("Cheque");
+                                            metodosPago.add("Cheque");
+                                            break;
+                                        case 4:
+                                            cliente.getFactura().setMetodoPago("Otro");
+                                            metodosPago.add("Otro");
+                                            break;
+                                        default:
+                                            System.out.println("Número no válido");
+                                            break;
+                                    }
+                                }
+                                if (valorFactura == 0){
+                                    System.out.println("La factura ha sido pagada.");
+                                }
                             }
                             else {
                                 System.out.println("Cédula no válida.");
