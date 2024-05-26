@@ -217,24 +217,32 @@ public class Main {
             switch (eleccion) {
                 case 1:
                     System.out.println("Por favor ingrese el número de personas que van a pagar la factura.");
+                    ArrayList<Cliente> clientesPagadores = new ArrayList<Cliente>();
+                    int cedula = 0;
                     int numeroPersonas = readInt();
                     if (numeroPersonas == mesa.getClientes().size()){
                         int valorFactura = mesa.getFacturaUnificada().getValor();
                         int valorPorPersona = valorFactura / numeroPersonas;
                         System.out.println("El valor por persona es: " + valorPorPersona);
+                        //limpiarPantalla();
+                        System.out.println("Ingrese las cédulas de las personas que pagarán la factura.");
+//                        for (int i = 0; i < numeroPersonas; i++){
+//                            cedula = readInt();
+//                            if (cedula == mesa.getClientes().get(i).getCedula()){
+//                                clientesPagadores.add(mesa.getClientes().get(i));
                     }
                     else{
                         System.out.println("Ingrese las cédulas de las personas que pagarán la factura.");
-                        ArrayList<Cliente> clientesPagadores = new ArrayList<Cliente>();
-                        for (int i = 0; i < numeroPersonas; i++){
-                            int cedula = readInt();
-                            if (cedula == mesa.getClientes().get(i).getCedula()){
-                                clientesPagadores.add(mesa.getClientes().get(i));
+                        for (int j = 0; j < numeroPersonas; j++){
+                            cedula = readInt();
+                            if (cedula == mesa.getClientes().get(j).getCedula()){
+                                clientesPagadores.add(mesa.getClientes().get(j));
+                                int valor = 0;
                                 for (Cliente cliente : clientesPagadores){
                                     boolean encendido2 = true;
                                     do {
                                         System.out.println("Ingrese la cantidad que desea pagar.");
-                                        int valor = readInt();
+                                        valor = readInt();
                                         if (valor >= mesa.getFacturaUnificada().getValor()) {
                                             System.out.println("El valor ingresado es mayor al valor de la factura.");
                                         } else {
@@ -274,7 +282,7 @@ public class Main {
                                             break;
                                     }
                                 }
-                                if (valorFactura == 0){
+                                if (mesa.getFacturaUnificada().getValor() == 0){
                                     System.out.println("La factura ha sido pagada.");
                                 }
                             }
@@ -294,6 +302,10 @@ public class Main {
             }
 
         } while (encendido);
+    }
+
+    public static void cobrar(){
+
     }
 
     //Funcionalidad 4: Agregar Sede
