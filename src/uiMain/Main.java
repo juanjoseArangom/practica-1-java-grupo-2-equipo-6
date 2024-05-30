@@ -172,7 +172,7 @@ public class Main {
     }
 
     // Interacción 1: cobrarFactura
-
+    // Este método es el encargado de cobrar la factura de una mesa en específico. Es la primera interacción de la funcionalidad número 3.
     public static void cobrarFactura(Mesa mesa) {
         boolean encendido = true;
         do {
@@ -192,10 +192,11 @@ public class Main {
                     mesa.getFacturaUnificada().setPropina(propina);
                     mesa.getFacturaUnificada().setValor(mesa.getFacturaUnificada().getValor() + propina);
                     System.out.println("El valor de la factura con propina es: " + mesa.getFacturaUnificada().getValor());
-
+                    separarFactura(mesa);
                     break;
                 case 2:
-                    ;
+                    System.out.println("El valor de la factura sin propina es: " + mesa.getFacturaUnificada().getValor());
+                    separarFactura(mesa);
                     break;
                 default:
                     System.out.println("Número no válido.");
@@ -204,10 +205,10 @@ public class Main {
         } while (encendido);
     }
 
+    // Este método pertenece a la primera interacción y se encarga de separar y cobrar la factura de la mesa que desea dejar el restaurante.
     public static void separarFactura(Mesa mesa) {
         boolean encendido = true;
         do {
-            System.out.println("Interacción 2.");
             System.out.println("¿Desea separar la factura?");
             System.out.println("""
                     1. Sí.
@@ -235,10 +236,10 @@ public class Main {
                                 limpiarPantalla();
                                 clientesPagadores = mesa.getClientes();
                                 for (Cliente clientePagador : clientesPagadores) {
-                                    escogerMetodoPago(mesa, clientePagador);
+                                    escogerMetodoPago(clientePagador);
                                     for (Cliente cliente : mesa.getClientes()) {
                                         System.out.println(cliente.getNombre());
-                                        escogerMetodoPago(mesa, cliente);
+                                        escogerMetodoPago(cliente);
                                         boolean transaccionConfirmada = false;
                                         do {
                                             System.out.println("¿Desea confirmar la transacción con un valor de: " + valorPorPersona + "?");
@@ -271,7 +272,7 @@ public class Main {
                                 System.out.println("Cada persona pagará lo que consumió.");
                                 for (Cliente cliente : mesa.getClientes()) {
                                     System.out.println(cliente.getNombre() + "debe pagar: " + cliente.getFactura().getValor());
-                                    escogerMetodoPago(mesa, cliente);
+                                    escogerMetodoPago(cliente);
                                     boolean transaccionConfirmada = false;
                                     do {
                                         System.out.println("¿Desea confirmar la transacción con un valor de: " + cliente.getFactura().getValor() + "?");
@@ -320,7 +321,7 @@ public class Main {
                                             encendido2 = false;
                                         }
                                     } while (encendido2);
-                                    escogerMetodoPago(mesa, cliente);
+                                    escogerMetodoPago(cliente);
                                 }
                                 if (mesa.getFacturaUnificada().getValor() == 0) {
                                     System.out.println("La factura ha sido pagada.");
@@ -338,7 +339,7 @@ public class Main {
                     int cedulaCliente = readInt();
                     for (Cliente cliente : mesa.getClientes()) {
                         if (cliente.getCedula() == cedulaCliente) {
-                            escogerMetodoPago(mesa, cliente);
+                            escogerMetodoPago(cliente);
                             boolean transaccionConfirmada = false;
                             do {
                                 System.out.println("¿Desea confirmar la transacción con un valor de: " + mesa.getFacturaUnificada().getValor() + "?");
@@ -353,7 +354,7 @@ public class Main {
                                         for (Cliente clientes : mesa.getClientes()) {
                                             clientes.getFactura().pagar();
                                         }
-                                        mesa.getFacturaUnificada().setValor(mesa.getFacturaUnificada().getValor() - mesa.getFacturaUnificada().getValor());
+                                        mesa.getFacturaUnificada().setValor(0);
                                         transaccionConfirmada = true;
                                         break;
                                     case 2:
@@ -369,18 +370,16 @@ public class Main {
                         }
                         // aplicarBeneficios(UNICAMENTE AL CLIENTE QUE REALIZÓ EL PAGO){}
                         break;
-
             }
-
             default:
                 System.out.println("Número no válido.");
                 break;
         }
-
         } while (encendido);
     }
 
-    public static void escogerMetodoPago(Mesa mesa, Cliente clientePagador) {
+    // Este método se encarga de dar las opciones de método de pago a la hora de cobrar la factura.
+    public static void escogerMetodoPago(Cliente clientePagador) {
         System.out.println("Escoja el método de pago.");
         System.out.println("""
                 1. Efectivo.
@@ -412,6 +411,124 @@ public class Main {
                 break;
         }
     }
+
+    // Interacción 2: liberarMesa
+
+    public static void liberarMesa(Mesa mesa){
+        boolean encendido = true;
+        do {
+            System.out.println("Interacción 2.");
+            System.out.println("¿Algún cliente desea reservar nuevamente?");
+            System.out.println("""
+                    1. Sí.
+                    2. No.
+                    Escriba un número para elegir su opción.""");
+            int eleccion = readInt();
+            switch (eleccion){
+                case 1:
+                    System.out.println("¿Cuántos clientes desean hacer una reservación?");
+                    int numeroClientes = readInt();
+                    for (int i = 0; i < numeroClientes; i++){
+                        System.out.println("Ingrese la cédula del cliente que desea reservar.");
+                        int cedula = readInt();
+                        for (Cliente cliente : mesa.getClientes()){
+                            if (cliente.getCedula() == cedula){
+                                if (cliente.getAfiliacion() != null){
+                                    // reservarMesa(mesa, cliente);
+                                    // aplicarDescuentos(){}
+                                } else {
+                                    System.out.println("¿Desea afiliarse?");
+                                    System.out.println("""
+                                            1. Sí.
+                                            2. No.
+                                            Escriba un número para elegir su opción.""");
+                                    int eleccion2 = readInt();
+                                    switch (eleccion2){
+                                        case 1:
+                                            System.out.println("¿Qué nivel de afiliación desea?");
+                                            System.out.println("""
+                                                    1. Estrellita.
+                                                    2. Estrella.
+                                                    3. Super estrellota.
+                                                    Escriba un número para elegir su opción.""");
+                                            int nivelAfiliacion = readInt();
+                                            switch (nivelAfiliacion){
+                                                case 1:
+                                                    cliente.setAfiliacion("Estrellita");
+                                                    // aplicarDescuentos(){} Se aplican descuentos a la reserva que va a realizar.
+                                                    break;
+                                                case 2:
+                                                    cliente.setAfiliacion("Estrella");
+                                                    // aplicarDescuentos(){} Se aplican descuentos a la reserva que va a realizar.
+                                                    break;
+                                                case 3:
+                                                    cliente.setAfiliacion("Super estrellota");
+                                                    // aplicarDescuentos(){} Se aplican descuentos a la reserva que va a realizar.
+                                                    break;
+                                                default:
+                                                    System.out.println("Número no válido.");
+                                                    break;
+                                            }
+                                            break;
+                                        case 2:
+                                            // reservarMesa (mesa, cliente);
+                                            break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    break;
+                case 2:
+                    for (Cliente cliente : mesa.getClientes()){
+                        if (cliente.getAfiliacion() == null){
+                            System.out.println("¿Desea afiliarse?");
+                            System.out.println("""
+                                    1. Sí.
+                                    2. No.
+                                    Escriba un número para elegir su opción.""");
+                            int eleccion3 = readInt();
+                            switch (eleccion3){
+                                case 1:
+                                    System.out.println("¿Qué nivel de afiliación desea?");
+                                    System.out.println("""
+                                            1. Estrellita.
+                                            2. Estrella.
+                                            3. Super estrellota.
+                                            Escriba un número para elegir su opción.""");
+                                    int nivelAfiliacion = readInt();
+                                    switch (nivelAfiliacion){
+                                        case 1:
+                                            cliente.setAfiliacion("Estrellita");
+
+                                            break;
+                                        case 2:
+                                            cliente.setAfiliacion("Estrella");
+
+                                            break;
+                                        case 3:
+                                            cliente.setAfiliacion("Super estrellota");
+
+                                            break;
+                                        default:
+                                            System.out.println("Número no válido.");
+                                            break;
+                                    }
+                                    break;
+                                case 2:
+                                    break;
+                            }
+                        }
+                    }
+            }
+        } while (encendido);
+    }
+
+
+
+
+
+
 
     //Funcionalidad 4: Agregar Sede
     public static void agregarSede() {
