@@ -20,6 +20,7 @@ public class Restaurante {
     private int calificacion;
     private ArrayList<Ingrediente> bodega = new ArrayList<Ingrediente>();
     private ArrayList<Reserva> reservas = new ArrayList<Reserva>();
+    private ArrayList<String> reseñas = new ArrayList<String>();
 
     //Constructores
     public Restaurante() {}
@@ -60,6 +61,9 @@ public class Restaurante {
     }
     public void setCalificacion(int calificacion) {
         this.calificacion = calificacion;
+    }
+    public void añadirReseña(String reseña) {
+        reseñas.add(reseña);
     }
 
     @Override

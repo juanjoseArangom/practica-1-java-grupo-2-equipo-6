@@ -108,8 +108,18 @@ public class Main {
         try {
             return Integer.parseInt(numero);
         } catch (NumberFormatException ex) {
-            System.out.println("Ingrese un número enteor válido. Ej: 172, 92, 5");
+            System.out.println("Ingrese un número entero válido. Ej: 172, 92, 5");
             return readInt();
+        }
+    }
+
+    static float readFloat(){
+        String numero = readString();
+        try {
+            return Float.parseFloat(numero);
+        } catch (NumberFormatException ex) {
+            System.out.println("Ingrese un número decimal válido. Ej: 2.5, 7.2, 5.1");
+            return readFloat();
         }
     }
 
@@ -454,15 +464,78 @@ public class Main {
                                             int nivelAfiliacion = readInt();
                                             switch (nivelAfiliacion){
                                                 case 1:
-                                                    cliente.setAfiliacion("Estrellita");
+                                                    boolean transaccionConfirmada = false;
+                                                    do {
+                                                        System.out.println("¿Desea confirmar la transacción con un valor de: 35.900?");
+                                                        System.out.println("""
+                                                                1. Sí.
+                                                                2. No.
+                                                                Escriba un número para elegir su opción.""");
+                                                        int confirmacion = readInt();
+                                                        switch (confirmacion) {
+                                                            case 1:
+                                                                System.out.println("Transacción confirmada.");
+                                                                cliente.setAfiliacion("Estrellita");
+                                                                transaccionConfirmada = true;
+                                                                break;
+                                                            case 2:
+                                                                System.out.println("Afiliación no confirmada.");
+                                                                break;
+                                                            default:
+                                                                System.out.println("Número no válido.");
+                                                                break;
+                                                        }
+                                                    } while (!transaccionConfirmada);
                                                     // aplicarDescuentos(){} Se aplican descuentos a la reserva que va a realizar.
                                                     break;
                                                 case 2:
-                                                    cliente.setAfiliacion("Estrella");
+                                                    boolean transaccionConfirmada2 = false;
+                                                    do {
+                                                        System.out.println("¿Desea confirmar la transacción con un valor de: 48.900?");
+                                                        System.out.println("""
+                                                                1. Sí.
+                                                                2. No.
+                                                                Escriba un número para elegir su opción.""");
+                                                        int confirmacion = readInt();
+                                                        switch (confirmacion) {
+                                                            case 1:
+                                                                System.out.println("Transacción confirmada.");
+                                                                cliente.setAfiliacion("Estrella");
+                                                                transaccionConfirmada2 = true;
+                                                                break;
+                                                            case 2:
+                                                                System.out.println("Afiliación no confirmada.");
+                                                                break;
+                                                            default:
+                                                                System.out.println("Número no válido.");
+                                                                break;
+                                                        }
+                                                    } while (!transaccionConfirmada2);
                                                     // aplicarDescuentos(){} Se aplican descuentos a la reserva que va a realizar.
                                                     break;
                                                 case 3:
-                                                    cliente.setAfiliacion("Super estrellota");
+                                                    boolean transaccionConfirmada3 = false;
+                                                    do {
+                                                        System.out.println("¿Desea confirmar la transacción con un valor de: 65.900?");
+                                                        System.out.println("""
+                                                                1. Sí.
+                                                                2. No.
+                                                                Escriba un número para elegir su opción.""");
+                                                        int confirmacion = readInt();
+                                                        switch (confirmacion) {
+                                                            case 1:
+                                                                System.out.println("Transacción confirmada.");
+                                                                cliente.setAfiliacion("Super estrellota");
+                                                                transaccionConfirmada3 = true;
+                                                                break;
+                                                            case 2:
+                                                                System.out.println("Afiliación no confirmada.");
+                                                                break;
+                                                            default:
+                                                                System.out.println("Número no válido.");
+                                                                break;
+                                                        }
+                                                    } while (!transaccionConfirmada3);
                                                     // aplicarDescuentos(){} Se aplican descuentos a la reserva que va a realizar.
                                                     break;
                                                 default:
@@ -477,7 +550,7 @@ public class Main {
                                 }
                             }
                         }
-                    }
+                    } encendido = false;
                     break;
                 case 2:
                     for (Cliente cliente : mesa.getClientes()){
@@ -499,32 +572,142 @@ public class Main {
                                     int nivelAfiliacion = readInt();
                                     switch (nivelAfiliacion){
                                         case 1:
-                                            cliente.setAfiliacion("Estrellita");
-
+                                            boolean transaccionConfirmada = false;
+                                            do {
+                                                System.out.println("¿Desea confirmar la transacción con un valor de: 35.900?");
+                                                System.out.println("""
+                                                                1. Sí.
+                                                                2. No.
+                                                                Escriba un número para elegir su opción.""");
+                                                int confirmacion = readInt();
+                                                switch (confirmacion) {
+                                                    case 1:
+                                                        System.out.println("Transacción confirmada.");
+                                                        cliente.setAfiliacion("Estrellita");
+                                                        transaccionConfirmada = true;
+                                                        break;
+                                                    case 2:
+                                                        System.out.println("Afiliación no confirmada.");
+                                                        break;
+                                                    default:
+                                                        System.out.println("Número no válido.");
+                                                        break;
+                                                }
+                                            } while (!transaccionConfirmada);
                                             break;
                                         case 2:
-                                            cliente.setAfiliacion("Estrella");
-
-                                            break;
+                                            boolean transaccionConfirmada2 = false;
+                                            do {
+                                                System.out.println("¿Desea confirmar la transacción con un valor de: 48.900?");
+                                                System.out.println("""
+                                                        1. Sí.
+                                                        2. No.
+                                                        Escriba un número para elegir su opción.""");
+                                                int confirmacion = readInt();
+                                                switch (confirmacion) {
+                                                    case 1:
+                                                        System.out.println("Transacción confirmada.");
+                                                        cliente.setAfiliacion("Estrella");
+                                                        transaccionConfirmada2 = true;
+                                                        break;
+                                                    case 2:
+                                                        System.out.println("Afiliación no confirmada.");
+                                                        break;
+                                                    default:
+                                                        System.out.println("Número no válido.");
+                                                        break;
+                                                }
+                                            } while (!transaccionConfirmada2);
                                         case 3:
-                                            cliente.setAfiliacion("Super estrellota");
-
-                                            break;
+                                            boolean transaccionConfirmada3 = false;
+                                            do {
+                                                System.out.println("¿Desea confirmar la transacción con un valor de: 65.900?");
+                                                System.out.println("""
+                                                                1. Sí.
+                                                                2. No.
+                                                                Escriba un número para elegir su opción.""");
+                                                int confirmacion = readInt();
+                                                switch (confirmacion) {
+                                                    case 1:
+                                                        System.out.println("Transacción confirmada.");
+                                                        cliente.setAfiliacion("Super estrellota");
+                                                        transaccionConfirmada3 = true;
+                                                        break;
+                                                    case 2:
+                                                        System.out.println("Afiliación no confirmada.");
+                                                        break;
+                                                    default:
+                                                        System.out.println("Número no válido.");
+                                                        break;
+                                                }
+                                            } while (!transaccionConfirmada3);
                                         default:
                                             System.out.println("Número no válido.");
                                             break;
-                                    }
+                                    } calificarRestaurante(mesa);
                                     break;
                                 case 2:
                                     break;
                             }
+                        } else {
+                            calificarRestaurante(mesa);
                         }
                     }
             }
         } while (encendido);
     }
 
-
+    public static void calificarRestaurante(Mesa mesa){
+        for (Cliente cliente : mesa.getClientes()){
+            System.out.println("Por favor califique el restaurante.");
+            System.out.println("Ingrese una calificación del 1 al 5.");
+            float calificacion = readFloat();
+            if (calificacion >= 1 && calificacion <= 5){
+                System.out.println("Gracias por su calificación.");
+            } else {
+                System.out.println("Ingrese una calificación válida.");
+            }
+            System.out.println("¿Desea añadir una reseña?");
+            System.out.println("""
+                    1. Sí.
+                    2. No.
+                    Escriba un número para elegir su opción.""");
+            int eleccion = readInt();
+            switch (eleccion){
+                case 1:
+                    System.out.println("Por favor ingrese su reseña.");
+                    String reseña = readString();
+                    mesa.getRestaurante().añadirReseña(reseña);
+                    if (cliente.getAfiliacion() != null){
+                        // aplicarBeneficios(){}
+                        System.out.println("Gracias por su reseña. Obtuvo un punto extra por ayudarnos a mejorar.");
+                    } else {
+                        System.out.println("Gracias por su reseña.");
+                    }
+                    break;
+                case 2:
+                    break;
+                default:
+                    System.out.println("Número no válido.");
+                    break;
+            }
+            System.out.println("Ingrese una calificación para su plato.");
+            System.out.println("Ingrese una calificación del 1 al 5.");
+            float calificacionPlato = readFloat();
+            for (Plato plato : cliente.getFactura().getPedido().getPlatos()) {
+                if (calificacionPlato >= 1 && calificacionPlato <= 5) {
+                    if (calificacionPlato >= 4.5) {
+                        cliente.agregarPlatoFavorito(plato);
+                        plato.setCalificacion((plato.getCalificacion() + calificacionPlato) / (plato.getCantidadCalificaciones()));
+                    }
+                    System.out.println("Gracias por su calificación.");
+                } else {
+                    System.out.println("Ingrese una calificación válida.");
+                }
+            }
+        }
+        mesa.setClientes(null);
+    }
 
 
 
