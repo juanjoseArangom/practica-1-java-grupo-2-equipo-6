@@ -203,10 +203,14 @@ public class Main {
                     mesa.getFacturaUnificada().setValor(mesa.getFacturaUnificada().getValor() + propina);
                     System.out.println("El valor de la factura con propina es: " + mesa.getFacturaUnificada().getValor());
                     separarFactura(mesa);
+                    liberarMesa(mesa);
+                    encendido = false;
                     break;
                 case 2:
                     System.out.println("El valor de la factura sin propina es: " + mesa.getFacturaUnificada().getValor());
                     separarFactura(mesa);
+                    liberarMesa(mesa);
+                    encendido = false;
                     break;
                 default:
                     System.out.println("Número no válido.");
@@ -342,6 +346,7 @@ public class Main {
 
                         }
                     }
+                    encendido = false;
                     break;
                 case 2:
                     limpiarPantalla();
@@ -379,6 +384,7 @@ public class Main {
                             System.out.println("La factura ha sido pagada. Esperamos que vuelvan pronto!!!");
                         }
                         // aplicarBeneficios(UNICAMENTE AL CLIENTE QUE REALIZÓ EL PAGO){}
+                        encendido = false;
                         break;
             }
             default:
@@ -679,7 +685,7 @@ public class Main {
                     String reseña = readString();
                     mesa.getRestaurante().añadirReseña(reseña);
                     if (cliente.getAfiliacion() != null){
-                        // aplicarBeneficios(){}
+                        cliente.setPuntosAcumulados(cliente.getPuntosAcumulados() + 1);
                         System.out.println("Gracias por su reseña. Obtuvo un punto extra por ayudarnos a mejorar.");
                     } else {
                         System.out.println("Gracias por su reseña.");
@@ -709,6 +715,10 @@ public class Main {
         mesa.setClientes(null);
     }
 
+    public static void actualizarRestaurante(){
+
+
+    }
 
 
 
