@@ -663,13 +663,14 @@ public class Main {
         } while (encendido);
     }
 
-    public static void calificarRestaurante(Mesa mesa){
-        for (Cliente cliente : mesa.getClientes()){
+    public static void calificarRestaurante(Mesa mesa) {
+        for (Cliente cliente : mesa.getClientes()) {
             System.out.println("Por favor califique el restaurante.");
             System.out.println("Ingrese una calificación del 1 al 5.");
             float calificacion = readFloat();
-            if (calificacion >= 1 && calificacion <= 5){
+            if (calificacion >= 1 && calificacion <= 5) {
                 System.out.println("Gracias por su calificación.");
+                mesa.getRestaurante().setCalificacion(calificacion);
             } else {
                 System.out.println("Ingrese una calificación válida.");
             }
@@ -679,12 +680,12 @@ public class Main {
                     2. No.
                     Escriba un número para elegir su opción.""");
             int eleccion = readInt();
-            switch (eleccion){
+            switch (eleccion) {
                 case 1:
                     System.out.println("Por favor ingrese su reseña.");
                     String reseña = readString();
                     mesa.getRestaurante().añadirReseña(reseña);
-                    if (cliente.getAfiliacion() != null){
+                    if (cliente.getAfiliacion() != null) {
                         cliente.setPuntosAcumulados(cliente.getPuntosAcumulados() + 1);
                         System.out.println("Gracias por su reseña. Obtuvo un punto extra por ayudarnos a mejorar.");
                     } else {
@@ -704,9 +705,10 @@ public class Main {
                 if (calificacionPlato >= 1 && calificacionPlato <= 5) {
                     if (calificacionPlato >= 4.5) {
                         cliente.agregarPlatoFavorito(plato);
-                        plato.setCalificacion((plato.getCalificacion() + calificacionPlato) / (plato.getCantidadCalificaciones()));
                     }
+                    plato.setCalificacion(calificacionPlato);
                     System.out.println("Gracias por su calificación.");
+                    actualizarRestaurante(plato, mesa);
                 } else {
                     System.out.println("Ingrese una calificación válida.");
                 }
@@ -715,8 +717,15 @@ public class Main {
         mesa.setClientes(null);
     }
 
-    public static void actualizarRestaurante(){
-
+    public static void actualizarRestaurante(Plato platoCalificado, Mesa mesa){
+        if (platoCalificado.getCalificacion() >= 4.5 && platoCalificado.getCantidadCalificaciones() >= 3){
+            mesa.getRestaurante().agregarPlatoRecomendado(platoCalificado);
+            platoCalificado.setPrecio((int) (platoCalificado.getPrecio() + (platoCalificado.getPrecio() * 0.2)));
+        }
+        if (platoCalificado.getCalificacion() <= 3.7 && platoCalificado.getCantidadCalificaciones() >= 3){
+            mesa.getRestaurante().agregarPlatoDescuento(platoCalificado);
+            platoCalificado.setPrecio((int) (platoCalificado.getPrecio() - (platoCalificado.getPrecio() * 0.15)));
+        }
 
     }
 

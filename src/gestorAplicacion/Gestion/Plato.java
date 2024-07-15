@@ -9,7 +9,7 @@ public class Plato {
     private float calificacion;
     private boolean recomendado;
     private int cantidadCalificaciones;
-    public static int vecesPedido;
+    private int vecesPedido;
 
     //Constructores
     public Plato() {}
@@ -53,7 +53,8 @@ public class Plato {
     }
 
     public void setCalificacion(float calificacion) {
-        this.calificacion = calificacion;
+        this.calificacion = (getCalificacion()+calificacion)/(cantidadCalificaciones+1);
+        cantidadCalificaciones++;
     }
 
     public boolean isRecomendado() {
