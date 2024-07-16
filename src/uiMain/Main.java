@@ -708,7 +708,8 @@ public class Main {
                     }
                     plato.setCalificacion(calificacionPlato);
                     System.out.println("Gracias por su calificación.");
-                    actualizarRestaurante(plato, mesa);
+                    actualizarPlatos(plato, mesa);
+                    actualizarMenu(mesa);
                 } else {
                     System.out.println("Ingrese una calificación válida.");
                 }
@@ -717,9 +718,11 @@ public class Main {
         mesa.setClientes(null);
     }
 
-    public static void actualizarRestaurante(Plato platoCalificado, Mesa mesa){
+    // Interacción 3: actualizarRestaurante
+    public static void actualizarPlatos(Plato platoCalificado, Mesa mesa){
         if (platoCalificado.getCalificacion() >= 4.5 && platoCalificado.getCantidadCalificaciones() >= 3){
             mesa.getRestaurante().agregarPlatoRecomendado(platoCalificado);
+            platoCalificado.setRecomendado(true);
             platoCalificado.setPrecio((int) (platoCalificado.getPrecio() + (platoCalificado.getPrecio() * 0.2)));
         }
         if (platoCalificado.getCalificacion() <= 3.7 && platoCalificado.getCantidadCalificaciones() >= 3){
@@ -727,6 +730,76 @@ public class Main {
             platoCalificado.setPrecio((int) (platoCalificado.getPrecio() - (platoCalificado.getPrecio() * 0.15)));
         }
 
+    }
+
+    public static Restaurante actualizarMenu(Mesa mesa){
+        Restaurante restaurante = mesa.getRestaurante();
+        for (Plato plato : mesa.getRestaurante().getPlatosRecomendados()){
+            if (plato.getPedidosRecomendados() >= 2){
+                if (plato.getCalificacion() > 4.5){
+            } else {
+                restaurante.eliminarPlatoRecomendado(plato);
+                plato.setPrecio((int) (plato.getPrecio() - (plato.getPrecio() * 0.2)));
+            }
+            }
+        }
+        for (Plato plato : mesa.getRestaurante().getPlatosDescuento()){
+            if (plato.getPedidosRecomendados() >= 2){
+                if (plato.getCalificacion() < 3.7){
+                    restaurante.eliminarPlato(plato);
+                    System.out.println("El plato " + plato.getNombre() + " ha sido eliminado del menú.");
+                    System.out.println("¿Qué desea hacer?");
+                    System.out.println("""
+                            1. Añadir otro plato.
+                            2. Traer un plato de otra sede.
+                            Escriba un número para elegir su opción.""");
+                    int eleccion = readInt();
+                    switch (eleccion){
+                        case 1:
+                            System.out.println("Por favor ingrese el nombre del plato.");
+                            String nombrePlato = readString();
+                            System.out.println("Por favor ingrese el precio del plato.");
+                            int precioPlato = readInt();
+                            System.out.println("Por favor ingrese los ingredientes del plato.");
+                            ArrayList<Ingrediente> ingredientes = new ArrayList<>();
+                            while (true){
+                                System.out.println("Por favor ingrese el nombre del ingrediente o Stop para detenerse:");
+                                String nombreIngrediente = readString();
+                                for (Ingrediente ingrediente : Ingrediente.getListaIngredientes()){
+                                    if (ingrediente.getNombre().equals(nombreIngrediente)){
+                                        ingredientes.add(ingrediente);
+                                        break;
+                                    }
+                                }
+                                if (nombreIngrediente.equals("Stop")){
+                                    break;
+                                }
+                            }
+                            restaurante.agregarPlato(new Plato(nombrePlato, precioPlato, ingredientes));
+                            System.out.println("Se ha añadido un nuevo plato al menú.");
+                            break;
+                        case 2:
+                            System.out.println("Por favor ingrese el nombre del plato.");
+//                            String nombrePlato2 = readString();
+//                            for (Restaurante restaurante1 : Restaurante.restaurantes){
+//                                for (Plato plato1 : restaurante1.getMenu()){
+//                                    if (plato1.getNombre().equals(nombrePlato2)){
+//                                        restaurante.getMenu().add(plato1);
+//                                    }
+//                                }
+//                            }
+                            break;
+                        default:
+                            System.out.println("Número no válido.");
+                            break;
+                    }
+                } else {
+                    restaurante.eliminarPlatoDescuento(plato);
+                    plato.setPrecio((int) (plato.getPrecio() + (plato.getPrecio() * 0.15)));
+                }
+            }
+        }
+        return restaurante;
     }
 
 

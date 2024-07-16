@@ -81,6 +81,18 @@ public class Restaurante {
     public void eliminarPlatoDescuento(Plato plato) {
         platosDescuento.remove(plato);
     }
+    public ArrayList<Plato> getPlatosRecomendados() {
+        return platosRecomendados;
+    }
+    public ArrayList<Plato> getPlatosDescuento() {
+        return platosDescuento;
+    }
+    public void eliminarPlato(Plato plato) {
+        menu.remove(plato);
+    }
+    public void agregarPlato(Plato plato) {
+        menu.add(plato);
+    }
 
 
     @Override
