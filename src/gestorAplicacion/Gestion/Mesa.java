@@ -107,7 +107,7 @@ public class Mesa {
     }
 
     public Factura getFacturaUnificada(){
-        return facturaUnificada;
+        return Factura.crearFacturaUnificada(facturas);
     }
 
 }

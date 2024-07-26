@@ -11,6 +11,14 @@ public class Ingrediente {
     private static ArrayList<Ingrediente> listaIngredientes = new ArrayList<Ingrediente>();
 
     // Constructor
+    public Ingrediente() {
+    }
+
+    public Ingrediente(String nombre, double cantidad){
+        this.nombre = nombre;
+        this.cantidad = cantidad;
+        listaIngredientes.add(this);
+    }
     public Ingrediente(String nombre, double cantidad, Date fechaCaducidad, int precio, int inventario) {
         this.nombre = nombre;
         this.cantidad = cantidad;

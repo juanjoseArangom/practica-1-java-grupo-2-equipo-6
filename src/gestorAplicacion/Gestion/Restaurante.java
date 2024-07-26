@@ -93,6 +93,9 @@ public class Restaurante {
     public void agregarPlato(Plato plato) {
         menu.add(plato);
     }
+    public void agregarMesa(Mesa mesa) {
+        mesas.add(mesa);
+    }
 
 
     @Override

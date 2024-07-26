@@ -87,6 +87,13 @@ public class Factura {
     public static void setNumeroFactura(int numeroFactura){
         Factura.numeroFactura = numeroFactura;
     }
+    public void setCliente(Cliente cliente){
+        this.cliente = cliente;
+    }
+    public Cliente getCliente(){
+        return cliente;
+    }
+
 
     public void calcularValor(){
         int valor = 0;

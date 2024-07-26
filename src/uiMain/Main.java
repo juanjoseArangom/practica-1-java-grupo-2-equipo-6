@@ -23,6 +23,63 @@ public class Main {
         zonas.add(new Zona(193134, "Kennedy", ciudad2));
 
         //Creamos mesas de muestra
+        //Test funcionalidad 3
+        Restaurante restaurante1 = new Restaurante();
+        Mesa mesa1 = new Mesa(3, false);
+        restaurante1.agregarMesa(mesa1);
+
+
+        //Creamos clientes de muestra para la mesa 1
+        ArrayList <Cliente> clientesMesa1 = new ArrayList<Cliente>();
+        Cliente cliente1 = new Cliente("Juan", 123, "Estrella", "1234567");
+        clientesMesa1.add(cliente1);
+        Cliente cliente2 = new Cliente("Pedro", 456, "Estrellita", "7654321");
+        clientesMesa1.add(cliente2);
+        Cliente cliente3 = new Cliente("María", 789, null, "9876543");
+        clientesMesa1.add(cliente3);
+        mesa1.setClientes(clientesMesa1);
+
+        //Creamos ingredientes y platos de muestra
+        Ingrediente Tomate = new Ingrediente("Tomate", 500);
+        Ingrediente Lechuga = new Ingrediente("Lechuga", 300);
+        ArrayList<Ingrediente> ingredientesEnsalada = new ArrayList<Ingrediente>();
+        ingredientesEnsalada.add(Tomate);
+        ingredientesEnsalada.add(Lechuga);
+        Plato Ensalada = new Plato("Ensalada", 19000, ingredientesEnsalada);
+
+        Ingrediente Carne = new Ingrediente("Carne", 1000);
+        Ingrediente Pan = new Ingrediente("Pan", 500);
+        ArrayList<Ingrediente> ingredientesHamburguesa = new ArrayList<Ingrediente>();
+        ingredientesHamburguesa.add(Carne);
+        ingredientesHamburguesa.add(Pan);
+        Plato Hamburguesa = new Plato("Hamburguesa", 25000, ingredientesHamburguesa);
+
+        Ingrediente Arroz = new Ingrediente("Arroz", 800);
+        Ingrediente Pollo = new Ingrediente("Pollo", 700);
+        ArrayList<Ingrediente> ingredientesArroz = new ArrayList<Ingrediente>();
+        ingredientesArroz.add(Arroz);
+        ingredientesArroz.add(Pollo);
+        Plato ArrozConPollo = new Plato("Arroz con pollo", 20000, ingredientesArroz);
+
+        //Creamos pedidos de muestra
+        Pedido pedido1 = new Pedido();
+        Pedido pedido2 = new Pedido();
+        Pedido pedido3 = new Pedido();
+
+        pedido1.agregarPlato(Ensalada);
+        pedido2.agregarPlato(Hamburguesa);
+        pedido3.agregarPlato(ArrozConPollo);
+
+        //Creamos facturas de muestra
+        Factura factura1 = new Factura(pedido1, "Efectivo", false, 0);
+        Factura factura2 = new Factura(pedido2, "Tarjeta", false, 0);
+        Factura factura3 = new Factura(pedido3, "Efectivo", false, 0);
+        cliente1.setFactura(factura1);
+        cliente2.setFactura(factura2);
+        cliente3.setFactura(factura3);
+
+
+
 
 
         //Agregamos el nombre de las zonas al array nombreZonas
@@ -187,6 +244,7 @@ public class Main {
         boolean encendido = true;
         do {
             System.out.println("Interacción 1.");
+            
             int valorFactura = mesa.getFacturaUnificada().getValor();
             System.out.println("El valor de la factura es: " + valorFactura);
             System.out.println("""
