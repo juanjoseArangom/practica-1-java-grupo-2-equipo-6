@@ -6,7 +6,6 @@ import java.util.ArrayList;
 
 public class Factura {
     //  Atributos
-    private Cliente cliente;
     private static int numeroFactura = 0;
     private int valor = 0;
     private String metodoPago;
@@ -14,7 +13,7 @@ public class Factura {
     private Pedido pedido;
     private int propina;
     private boolean pagada;
-    //  private Arraylist<String> platos = new ArrayList<String>();
+
 
     // Constructores
     public Factura(){};
@@ -38,7 +37,7 @@ public class Factura {
     public static Factura crearFacturaUnificada(ArrayList<Factura> facturas){
         int valor = 0;
         for (Factura factura : facturas) {
-            valor += factura.getValor();
+            valor += factura.calcularValor();
         }
         return new Factura(valor, 0, false);
     }
@@ -87,15 +86,12 @@ public class Factura {
     public static void setNumeroFactura(int numeroFactura){
         Factura.numeroFactura = numeroFactura;
     }
-    public void setCliente(Cliente cliente){
-        this.cliente = cliente;
-    }
-    public Cliente getCliente(){
-        return cliente;
+    public void setPagada(boolean pagada){
+        this.pagada = pagada;
     }
 
 
-    public void calcularValor(){
+    public int calcularValor(){
         int valor = 0;
         for (Plato plato : pedido.getPlatos()){
             valor += plato.getPrecio();
@@ -104,6 +100,7 @@ public class Factura {
             valor += (int) (valor * 0.19);
         }
         valor += propina;
-        this.valor = valor;
+        this.setValor(valor);
+        return valor;
     }
 }

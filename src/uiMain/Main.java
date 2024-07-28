@@ -244,8 +244,10 @@ public class Main {
         boolean encendido = true;
         do {
             System.out.println("Interacción 1.");
-            
-            int valorFactura = mesa.getFacturaUnificada().getValor();
+            int valorFactura = 0;
+            for (Cliente cliente : mesa.getClientes()) {
+                valorFactura += cliente.getFactura().calcularValor();
+            }
             System.out.println("El valor de la factura es: " + valorFactura);
             System.out.println("""
                     ¿Desea agregar propina?
@@ -257,15 +259,16 @@ public class Main {
                 case 1:
                     System.out.println("Por favor ingrese el valor de la propina.");
                     int propina = readInt();
-                    mesa.getFacturaUnificada().setPropina(propina);
-                    mesa.getFacturaUnificada().setValor(mesa.getFacturaUnificada().getValor() + propina);
-                    System.out.println("El valor de la factura con propina es: " + mesa.getFacturaUnificada().getValor());
+                    valorFactura += propina;
+                    mesa.setValorTotal(valorFactura);
+                    System.out.println("El valor de la factura con propina es: " + valorFactura);
                     separarFactura(mesa);
                     liberarMesa(mesa);
                     encendido = false;
                     break;
                 case 2:
-                    System.out.println("El valor de la factura sin propina es: " + mesa.getFacturaUnificada().getValor());
+                    System.out.println("El valor de la factura sin propina es: " + valorFactura);
+                    mesa.setValorTotal(valorFactura);
                     separarFactura(mesa);
                     liberarMesa(mesa);
                     encendido = false;
@@ -302,17 +305,14 @@ public class Main {
                         int eleccion2 = readInt();
                         switch (eleccion2) {
                             case 1:
-                                int valorFactura = mesa.getFacturaUnificada().getValor();
+                                int valorFactura = mesa.getValorTotal();
                                 int valorPorPersona = valorFactura / numeroPersonas;
                                 System.out.println("El valor por persona es: " + valorPorPersona);
                                 limpiarPantalla();
                                 clientesPagadores = mesa.getClientes();
                                 for (Cliente clientePagador : clientesPagadores) {
                                     escogerMetodoPago(clientePagador);
-                                    for (Cliente cliente : mesa.getClientes()) {
-                                        System.out.println(cliente.getNombre());
-                                        escogerMetodoPago(cliente);
-                                        boolean transaccionConfirmada = false;
+                                    boolean transaccionConfirmada = false;
                                         do {
                                             System.out.println("¿Desea confirmar la transacción con un valor de: " + valorPorPersona + "?");
                                             System.out.println("""
@@ -323,8 +323,8 @@ public class Main {
                                             switch (confirmacion) {
                                                 case 1:
                                                     System.out.println("Transacción confirmada.");
-                                                    cliente.getFactura().pagar();
-                                                    mesa.getFacturaUnificada().setValor(mesa.getFacturaUnificada().getValor() - valorPorPersona);
+                                                    clientePagador.getFactura().pagar();
+                                                    mesa.setValorTotal(mesa.getValorTotal() - valorPorPersona);
                                                     transaccionConfirmada = true;
                                                     break;
                                                 case 2:
@@ -334,16 +334,17 @@ public class Main {
                                                     break;
                                             }
                                         } while (!transaccionConfirmada);
-                                    }
+
                                 }
-                                if (mesa.getFacturaUnificada().getValor() == 0) {
+                                if (mesa.getValorTotal() == 0) {
                                     System.out.println("La factura ha sido pagada. Esperamos que vuelvan pronto!!!");
                                 }
+                                break;
                                 // aplicarBeneficios(){}
                             case 2:
                                 System.out.println("Cada persona pagará lo que consumió.");
                                 for (Cliente cliente : mesa.getClientes()) {
-                                    System.out.println(cliente.getNombre() + "debe pagar: " + cliente.getFactura().getValor());
+                                    System.out.println(cliente.getNombre() + " debe pagar: " + cliente.getFactura().getValor());
                                     escogerMetodoPago(cliente);
                                     boolean transaccionConfirmada = false;
                                     do {
@@ -357,7 +358,7 @@ public class Main {
                                             case 1:
                                                 System.out.println("Transacción confirmada.");
                                                 cliente.getFactura().pagar();
-                                                mesa.getFacturaUnificada().setValor(mesa.getFacturaUnificada().getValor() - cliente.getFactura().getValor());
+                                                mesa.setValorTotal(mesa.getValorTotal() - cliente.getFactura().getValor());
                                                 transaccionConfirmada = true;
                                                 break;
                                             case 2:
@@ -368,10 +369,11 @@ public class Main {
                                         }
                                     } while (!transaccionConfirmada);
                                 }
-                                if (mesa.getFacturaUnificada().getValor() == 0) {
+                                if (mesa.getValorTotal() == 0) {
                                     System.out.println("La factura ha sido pagada. Esperamos que vuelvan pronto!!!");
                                 }
                                 // aplicarBeneficios(){}
+                                break;
                         }
                     } else {
                         System.out.println("Ingrese las cédulas de las personas que pagarán la factura.");
@@ -385,17 +387,17 @@ public class Main {
                                     do {
                                         System.out.println("Ingrese la cantidad que desea pagar.");
                                         valor = readInt();
-                                        if (valor >= mesa.getFacturaUnificada().getValor()) {
+                                        if (valor >= mesa.getValorTotal()) {
                                             System.out.println("El valor ingresado es mayor al valor de la factura.");
                                         } else {
-                                            mesa.getFacturaUnificada().setValor(mesa.getFacturaUnificada().getValor() - valor);
-                                            System.out.println("El valor restante de la factura es: " + mesa.getFacturaUnificada().getValor());
+                                            mesa.setValorTotal(mesa.getValorTotal() - valor);
+                                            System.out.println("El valor restante de la factura es: " + mesa.getValorTotal());
                                             encendido2 = false;
                                         }
                                     } while (encendido2);
                                     escogerMetodoPago(cliente);
                                 }
-                                if (mesa.getFacturaUnificada().getValor() == 0) {
+                                if (mesa.getValorTotal() == 0) {
                                     System.out.println("La factura ha sido pagada.");
                                 }
                             } else {
@@ -415,7 +417,7 @@ public class Main {
                             escogerMetodoPago(cliente);
                             boolean transaccionConfirmada = false;
                             do {
-                                System.out.println("¿Desea confirmar la transacción con un valor de: " + mesa.getFacturaUnificada().getValor() + "?");
+                                System.out.println("¿Desea confirmar la transacción con un valor de: " + mesa.getValorTotal() + "?");
                                 System.out.println("""
                                         1. Sí.
                                         2. No.
@@ -427,7 +429,7 @@ public class Main {
                                         for (Cliente clientes : mesa.getClientes()) {
                                             clientes.getFactura().pagar();
                                         }
-                                        mesa.getFacturaUnificada().setValor(0);
+                                        mesa.setValorTotal(0);
                                         transaccionConfirmada = true;
                                         break;
                                     case 2:
@@ -438,7 +440,7 @@ public class Main {
                                 }
                             } while (!transaccionConfirmada);
                         }
-                        if (mesa.getFacturaUnificada().getValor() == 0) {
+                        if (mesa.getValorTotal() == 0) {
                             System.out.println("La factura ha sido pagada. Esperamos que vuelvan pronto!!!");
                         }
                         // aplicarBeneficios(UNICAMENTE AL CLIENTE QUE REALIZÓ EL PAGO){}
@@ -454,7 +456,7 @@ public class Main {
 
     // Este método se encarga de dar las opciones de método de pago a la hora de cobrar la factura.
     public static void escogerMetodoPago(Cliente clientePagador) {
-        System.out.println("Escoja el método de pago.");
+        System.out.println("Por favor escoja el método de pago: " + clientePagador.getNombre());
         System.out.println("""
                 1. Efectivo.
                 2. Tarjeta.

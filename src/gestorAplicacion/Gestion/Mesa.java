@@ -6,7 +6,7 @@ import gestorAplicacion.Personas.Cliente;
 public class Mesa {
     // Atributos
     private ArrayList<Factura> facturas = new ArrayList<Factura>();
-    private Factura facturaUnificada;
+    private int valorTotal;
     private ArrayList<Cliente> clientes = new ArrayList<Cliente>();
     private int numMesa;
     private int numAsientos = 4;
@@ -102,12 +102,12 @@ public class Mesa {
         return facturas;
     }
 
-    public void setFacturaUnificada(ArrayList<Factura> facturas){
-        this.facturaUnificada = Factura.crearFacturaUnificada(facturas);
+    public void setValorTotal(int valorTotal){
+        this.valorTotal = valorTotal;
     }
 
-    public Factura getFacturaUnificada(){
-        return Factura.crearFacturaUnificada(facturas);
+    public int getValorTotal(){
+        return valorTotal;
     }
 
 }
