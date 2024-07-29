@@ -11,6 +11,7 @@ public class Plato {
     private int cantidadCalificaciones;
     private int vecesPedido;
     private int pedidosRecomendados;
+    private int valorEnPuntosCliente;
 
     //Constructores
     public Plato() {}
@@ -112,4 +113,11 @@ public class Plato {
         return pedidosRecomendados;
     }
 
+    public int getValorEnPuntosCliente() {
+        return valorEnPuntosCliente;
+    }
+
+    public void setValorEnPuntosCliente(int valorEnPuntosCliente) {
+        this.valorEnPuntosCliente = valorEnPuntosCliente;
+    }
 }

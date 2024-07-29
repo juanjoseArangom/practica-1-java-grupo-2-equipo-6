@@ -31,11 +31,11 @@ public class Main {
 
         //Creamos clientes de muestra para la mesa 1
         ArrayList <Cliente> clientesMesa1 = new ArrayList<Cliente>();
-        Cliente cliente1 = new Cliente("Juan", 123, "Estrella", "1234567");
+        Cliente cliente1 = new Cliente("Juan", 001, "Estrella", "1234567");
         clientesMesa1.add(cliente1);
-        Cliente cliente2 = new Cliente("Pedro", 456, "Estrellita", "7654321");
+        Cliente cliente2 = new Cliente("Pedro", 002, "Estrellita", "7654321");
         clientesMesa1.add(cliente2);
-        Cliente cliente3 = new Cliente("María", 789, null, "9876543");
+        Cliente cliente3 = new Cliente("María", 003, null, "9876543");
         clientesMesa1.add(cliente3);
         mesa1.setClientes(clientesMesa1);
 
@@ -312,9 +312,11 @@ public class Main {
                                 clientesPagadores = mesa.getClientes();
                                 for (Cliente clientePagador : clientesPagadores) {
                                     escogerMetodoPago(clientePagador);
+                                    int valorFinalPorPersona = aplicarDescuentosCuenta(clientePagador, valorPorPersona);
                                     boolean transaccionConfirmada = false;
                                         do {
-                                            System.out.println("¿Desea confirmar la transacción con un valor de: " + valorPorPersona + "?");
+                                            System.out.println("Descuento por afiliación: " + (valorPorPersona - valorFinalPorPersona));
+                                            System.out.println("¿Desea confirmar la transacción con un valor de: " + valorFinalPorPersona + "?");
                                             System.out.println("""
                                                     1. Sí.
                                                     2. No.
@@ -340,15 +342,15 @@ public class Main {
                                     System.out.println("La factura ha sido pagada. Esperamos que vuelvan pronto!!!");
                                 }
                                 break;
-                                // aplicarBeneficios(){}
                             case 2:
                                 System.out.println("Cada persona pagará lo que consumió.");
                                 for (Cliente cliente : mesa.getClientes()) {
                                     System.out.println(cliente.getNombre() + " debe pagar: " + cliente.getFactura().getValor());
                                     escogerMetodoPago(cliente);
+                                    int valorFinalFactura = aplicarDescuentosCuenta(cliente, cliente.getFactura().getValor());
                                     boolean transaccionConfirmada = false;
                                     do {
-                                        System.out.println("¿Desea confirmar la transacción con un valor de: " + cliente.getFactura().getValor() + "?");
+                                        System.out.println("¿Desea confirmar la transacción con un valor de: " + valorFinalFactura + "?");
                                         System.out.println("""
                                                 1. Sí.
                                                 2. No.
@@ -372,12 +374,11 @@ public class Main {
                                 if (mesa.getValorTotal() == 0) {
                                     System.out.println("La factura ha sido pagada. Esperamos que vuelvan pronto!!!");
                                 }
-                                // aplicarBeneficios(){}
                                 break;
                         }
                     } else {
-                        System.out.println("Ingrese las cédulas de las personas que pagarán la factura.");
-                        for (int j = 0; j < numeroPersonas; j++) {
+                        for (int j = 0; j < numeroPersonas - 1; j++) {
+                            System.out.println("Ingrese la cédula de la persona que pagará la factura.");
                             cedula = readInt();
                             if (cedula == mesa.getClientes().get(j).getCedula()) {
                                 clientesPagadores.add(mesa.getClientes().get(j));
@@ -387,22 +388,24 @@ public class Main {
                                     do {
                                         System.out.println("Ingrese la cantidad que desea pagar.");
                                         valor = readInt();
-                                        if (valor >= mesa.getValorTotal()) {
+                                        if (valor > mesa.getValorTotal()) {
                                             System.out.println("El valor ingresado es mayor al valor de la factura.");
                                         } else {
-                                            mesa.setValorTotal(mesa.getValorTotal() - valor);
+                                            escogerMetodoPago(cliente);
+                                            int valorFinalPersona = aplicarDescuentosCuenta(cliente, valor);
+                                            mesa.setValorTotal(mesa.getValorTotal() - valorFinalPersona);
                                             System.out.println("El valor restante de la factura es: " + mesa.getValorTotal());
                                             encendido2 = false;
                                         }
                                     } while (encendido2);
-                                    escogerMetodoPago(cliente);
-                                }
-                                if (mesa.getValorTotal() == 0) {
-                                    System.out.println("La factura ha sido pagada.");
+
                                 }
                             } else {
                                 System.out.println("Cédula no válida.");
                             }
+                            if (mesa.getValorTotal() == 0) {
+                                System.out.println("La factura ha sido pagada.");
+                            } break;
 
                         }
                     }
@@ -461,7 +464,7 @@ public class Main {
                 1. Efectivo.
                 2. Tarjeta.
                 3. Cheque.
-                4. Otro.
+                4. Puntos.
                 Escriba un número para elegir su opción.""");
         int metodoPago = readInt();
         ArrayList<String> metodosPago = new ArrayList<String>();
@@ -479,8 +482,8 @@ public class Main {
                 metodosPago.add("Cheque");
                 break;
             case 4:
-                clientePagador.getFactura().setMetodoPago("Otro");
-                metodosPago.add("Otro");
+                clientePagador.getFactura().setMetodoPago("Puntos");
+                metodosPago.add("Puntos");
                 break;
             default:
                 System.out.println("Número no válido");
@@ -860,6 +863,114 @@ public class Main {
             }
         }
         return restaurante;
+    }
+
+    public static int aplicarDescuentosCuenta(Cliente cliente, int valorPorPersona) {
+        int valorFinal = 0;
+        if (cliente.getAfiliacion() != null) {
+            valorFinal = valorPorPersona;
+            System.out.println("Se aplicaron descuentos por su nivel de afiliación.");
+            if (cliente.getAfiliacion().equals("Estrellita")) {
+                switch (cliente.getFactura().getMetodoPago()) {
+                    case "Efectivo" -> {
+                        if (cliente.getFactura().getValor() < 30000) {
+                            valorFinal = (int) (valorPorPersona - (valorPorPersona * 0.05));
+                            cliente.setPuntosAcumulados(cliente.getPuntosAcumulados() + 1);
+                        } else if (cliente.getFactura().getValor() >= 30000) {
+                            valorFinal = (int) (valorPorPersona - (valorPorPersona * 0.07));;
+                            cliente.setPuntosAcumulados(cliente.getPuntosAcumulados() + 2);
+                        }
+                    }
+                    case "Tarjeta" -> {
+                        if (cliente.getFactura().getValor() < 30000) {
+                            valorFinal = (int) (valorPorPersona - (valorPorPersona * 0.03));
+                            cliente.setPuntosAcumulados(cliente.getPuntosAcumulados() + 1);
+                        } else if (cliente.getFactura().getValor() >= 30000) {
+                            valorFinal = (int) (valorPorPersona - (valorPorPersona * 0.05));
+                            cliente.setPuntosAcumulados(cliente.getPuntosAcumulados() + 2);
+                        }
+                    }
+                    case "Cheque" -> {
+                        if (cliente.getFactura().getValor() < 30000) {
+                            valorFinal = (int) (valorPorPersona - (valorPorPersona * 0.02));
+                            cliente.setPuntosAcumulados(cliente.getPuntosAcumulados() + 0);
+                        } else if (cliente.getFactura().getValor() >= 30000) {
+                            valorFinal = (int) (valorPorPersona - (valorPorPersona * 0.03));
+                            cliente.setPuntosAcumulados(cliente.getPuntosAcumulados() + 1);
+                        }
+                    }
+                    case "Puntos" -> {
+                    }
+                }
+            } else if (cliente.getAfiliacion().equals("Estrella")) {
+                switch (cliente.getFactura().getMetodoPago()) {
+                    case "Efectivo" -> {
+                        if (cliente.getFactura().getValor() < 30000) {
+                            valorFinal = (int) (valorPorPersona - (valorPorPersona * 0.07));
+                            cliente.setPuntosAcumulados(cliente.getPuntosAcumulados() + 2);
+                        } else if (cliente.getFactura().getValor() >= 30000) {
+                            valorFinal = (int) (valorPorPersona - (valorPorPersona * 0.15));
+                            cliente.setPuntosAcumulados(cliente.getPuntosAcumulados() + 4);
+                        }
+                    }
+                    case "Tarjeta" -> {
+                        if (cliente.getFactura().getValor() < 30000) {
+                            valorFinal = (int) (valorPorPersona - (valorPorPersona * 0.08));
+                            cliente.setPuntosAcumulados(cliente.getPuntosAcumulados() + 2);
+                        } else if (cliente.getFactura().getValor() >= 30000) {
+                            valorFinal = (int) (valorPorPersona - (valorPorPersona * 0.15));
+                            cliente.setPuntosAcumulados(cliente.getPuntosAcumulados() + 4);
+                        }
+                    }
+                    case "Cheque" -> {
+                        if (cliente.getFactura().getValor() < 30000) {
+                            valorFinal = (int) (valorPorPersona - (valorPorPersona * 0.02));
+                            cliente.setPuntosAcumulados(cliente.getPuntosAcumulados() + 0);
+                        } else if (cliente.getFactura().getValor() >= 30000) {
+                            valorFinal = (int) (valorPorPersona - (valorPorPersona * 0.1));
+                            cliente.setPuntosAcumulados(cliente.getPuntosAcumulados() + 1);
+                        }
+                    }
+                    case "Puntos" -> {
+                    }
+                }
+            } else if (cliente.getAfiliacion().equals("Super estrellota")) {
+                switch (cliente.getFactura().getMetodoPago()) {
+                    case "Efectivo" -> {
+                        if (cliente.getFactura().getValor() < 30000) {
+                            valorFinal = (int) (valorPorPersona - (valorPorPersona * 0.1));
+                            cliente.setPuntosAcumulados(cliente.getPuntosAcumulados() + 6);
+                        } else if (cliente.getFactura().getValor() >= 30000) {
+                            valorFinal = (int) (valorPorPersona - (valorPorPersona * 0.2));
+                            cliente.setPuntosAcumulados(cliente.getPuntosAcumulados() + 8);
+                        }
+                    }
+                    case "Tarjeta" -> {
+                        if (cliente.getFactura().getValor() < 30000) {
+                            valorFinal = (int) (valorPorPersona - (valorPorPersona * 0.15));
+                            cliente.setPuntosAcumulados(cliente.getPuntosAcumulados() + 6);
+                        } else if (cliente.getFactura().getValor() >= 30000) {
+                            valorFinal = (int) (valorPorPersona - (valorPorPersona * 0.25));
+                            cliente.setPuntosAcumulados(cliente.getPuntosAcumulados() + 8);
+                        }
+                    }
+                    case "Cheque" -> {
+                        if (cliente.getFactura().getValor() < 30000) {
+                            valorFinal = (int) (valorPorPersona - (valorPorPersona * 0.05));
+                            cliente.setPuntosAcumulados(cliente.getPuntosAcumulados() + 1);
+                        } else if (cliente.getFactura().getValor() >= 30000) {
+                            valorFinal = (int) (valorPorPersona - (valorPorPersona * 0.08));
+                            cliente.setPuntosAcumulados(cliente.getPuntosAcumulados() + 2);
+                        }
+                    }
+                    case "Puntos" -> {
+                    }
+                }
+        }
+        } else {
+            valorFinal = valorPorPersona;
+        }
+        return valorFinal;
     }
 
 
