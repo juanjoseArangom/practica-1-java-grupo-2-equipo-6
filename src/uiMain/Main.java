@@ -293,10 +293,10 @@ public class Main {
             switch (eleccion) {
                 case 1:
                     System.out.println("Por favor ingrese el número de personas que van a pagar la factura.");
-                    ArrayList<Cliente> clientesPagadores = new ArrayList<Cliente>();
                     int cedula = 0;
                     int numeroPersonas = readInt();
                     if (numeroPersonas == mesa.getClientes().size()) {
+                        ArrayList<Cliente> clientesPagadores = new ArrayList<Cliente>();
                         System.out.println("¿Todos desean pagar el mismo monto?");
                         System.out.println("""
                                 1. Sí.
@@ -377,37 +377,170 @@ public class Main {
                                 break;
                         }
                     } else {
-                        for (int j = 0; j < numeroPersonas - 1; j++) {
-                            System.out.println("Ingrese la cédula de la persona que pagará la factura.");
-                            cedula = readInt();
-                            if (cedula == mesa.getClientes().get(j).getCedula()) {
-                                clientesPagadores.add(mesa.getClientes().get(j));
-                                int valor = 0;
-                                for (Cliente cliente : clientesPagadores) {
-                                    boolean encendido2 = true;
-                                    do {
-                                        System.out.println("Ingrese la cantidad que desea pagar.");
-                                        valor = readInt();
-                                        if (valor > mesa.getValorTotal()) {
-                                            System.out.println("El valor ingresado es mayor al valor de la factura.");
-                                        } else {
-                                            escogerMetodoPago(cliente);
-                                            int valorFinalPersona = aplicarDescuentosCuenta(cliente, valor);
-                                            mesa.setValorTotal(mesa.getValorTotal() - valorFinalPersona);
-                                            System.out.println("El valor restante de la factura es: " + mesa.getValorTotal());
-                                            encendido2 = false;
-                                        }
-                                    } while (encendido2);
+                        ArrayList<Cliente> clientesPagadores = new ArrayList<Cliente>(numeroPersonas);
+                        int personasProcesadas = 0;
 
+                        while (mesa.getValorTotal() > 0 && personasProcesadas < numeroPersonas) {
+                            for (int j = 0; j < numeroPersonas; j++) {
+                                System.out.println("Ingrese la cédula de la persona que pagará la factura.");
+                                cedula = readInt();  // Asegúrate de tener el método readInt() definido adecuadamente
+
+                                // Verificar si la cédula ingresada corresponde a algún cliente
+                                boolean cedulaValida = false;
+                                Cliente clientePagador = null;
+                                for (Cliente cliente : mesa.getClientes()) {
+                                    if (cliente.getCedula() == cedula) {
+                                        cedulaValida = true;
+                                        clientePagador = cliente;
+                                        clientesPagadores.add(cliente);
+                                        break;
+                                    }
                                 }
-                            } else {
-                                System.out.println("Cédula no válida.");
+                                if (cedulaValida) {
+                                    System.out.println("Ingrese la cantidad que desea pagar.");
+                                    int valor = readInt();
+                                    if (valor > mesa.getValorTotal()) {
+                                        System.out.println("El valor ingresado es mayor al valor de la factura.");
+                                    } else {
+                                        escogerMetodoPago(clientePagador);
+                                        int valorFinalPersona = aplicarDescuentosCuenta(clientePagador, valor);
+                                        mesa.setValorTotal(mesa.getValorTotal() - valor + (valor - valorFinalPersona));
+                                        System.out.println("El pago final fue: " + valorFinalPersona);
+                                        System.out.println("El valor restante de la factura es: " + mesa.getValorTotal());
+                                    }
+                                    personasProcesadas++;
+                                    if (mesa.getValorTotal() <= 0) {
+                                        break;
+                                    }
+                                } else {
+                                    System.out.println("Cédula no válida.");
+                                }
                             }
-                            if (mesa.getValorTotal() == 0) {
-                                System.out.println("La factura ha sido pagada.");
-                            } break;
-
                         }
+
+                        if (mesa.getValorTotal() != 0) {
+                            System.out.println("La factura aún no ha sido pagada.");
+                            System.out.println("Seleccione el cliente que pagará la factura.");
+                            for (int i = 0; i < clientesPagadores.size(); i++) {
+                                System.out.println(i + 1 + ". " + clientesPagadores.get(i).getNombre());
+                            }
+                            int clienteAPagar = readInt();
+                            System.out.println("Debe pagar el total restante de: " + mesa.getValorTotal());
+                            System.out.println("¿Desea confirmar la transacción?");
+                            System.out.println("""
+                                            1. Sí.
+                                            2. No.
+                                            Escriba un número para elegir su opción.""");
+                            int confirmacion = readInt();
+                            switch (confirmacion) {
+                                case 1:
+                                    System.out.println("Transacción confirmada.");
+                                    mesa.setValorTotal(0);
+                                    break;
+                                case 2:
+                                default:
+                                    System.out.println("Número no válido.");
+                                    break;
+                            }
+                        }
+
+                        System.out.println("La factura ha sido pagada.");
+//                        ArrayList<Cliente> clientesPagadores = new ArrayList<Cliente>(numeroPersonas);
+//                        do {
+//                            for (int j = 0; j < numeroPersonas + 1; j++) {
+//                                System.out.println("Ingrese la cédula de la persona que pagará la factura.");
+//                                cedula = readInt();  // Asegúrate de tener el método readInt() definido adecuadamente
+//
+//                                // Verificar si la cédula ingresada corresponde a algún cliente
+//                                boolean cedulaValida = false;
+//                                Cliente clientePagador = null;
+//                                for (Cliente cliente : mesa.getClientes()) {
+//                                    if (cliente.getCedula() == cedula) {
+//                                        cedulaValida = true;
+//                                        clientePagador = cliente;
+//                                        clientesPagadores.add(cliente);
+//                                        break;
+//                                    }
+//                                }
+//                                if (cedulaValida) {
+//                                    System.out.println("Ingrese la cantidad que desea pagar.");
+//                                    int valor = readInt();
+//                                    if (valor > mesa.getValorTotal()) {
+//                                        System.out.println("El valor ingresado es mayor al valor de la factura.");
+//                                    } else {
+//                                        escogerMetodoPago(clientePagador);
+//                                        int valorFinalPersona = aplicarDescuentosCuenta(clientePagador, valor);
+//                                        if (mesa.getValorTotal() - valor - (valor - valorFinalPersona) >= 0){
+//                                                mesa.setValorTotal(mesa.getValorTotal() - valor - (valor - valorFinalPersona));
+//                                        } else {
+//                                                mesa.setValorTotal(0);
+//                                        }
+//                                        System.out.println("El pago final fue: " + valorFinalPersona);
+//                                        System.out.println("El valor restante de la factura es: " + mesa.getValorTotal());
+//                                    }
+//                                } else {
+//                                    System.out.println("Cédula no válida.");
+//                                }
+//                            } if (mesa.getValorTotal() != 0){
+//                                System.out.println("La factura aún no ha sido pagada.");
+//                                System.out.println("Seleccione el cliente que pagará la factura.");
+//                                for (int i = 0; i < clientesPagadores.size(); i++) {
+//                                    System.out.println(i + 1 + ". " + clientesPagadores.get(i).getNombre());
+//                                }
+//                                int clienteAPagar = readInt();
+//                                System.out.println("Debe pagar el total restante de: " + mesa.getValorTotal());
+//                                System.out.println("¿Desea confirmar la transacción?");
+//                                System.out.println("""
+//                                        1. Sí.
+//                                        2. No.
+//                                        Escriba un número para elegir su opción.""");
+//                                int confirmacion = readInt();
+//                                switch (confirmacion) {
+//                                    case 1:
+//                                        System.out.println("Transacción confirmada.");
+//                                        mesa.setValorTotal(0);
+//                                        break;
+//                                    case 2:
+//
+//                                    default:
+//                                        System.out.println("Número no válido.");
+//                                        break;
+//                                }
+//                            }
+//                        } while (mesa.getValorTotal() > 0);
+//                        System.out.println("La factura ha sido pagada.");
+
+
+//                        do {
+//                        for (int j = 0; j < numeroPersonas - 1; j++) {
+//                            System.out.println("Ingrese la cédula de la persona que pagará la factura.");
+//                            cedula = readInt();
+//                            if (cedula == mesa.getClientes().get(j).getCedula()) {
+//                                clientesPagadores.add(mesa.getClientes().get(j));
+//                                int valor = 0;
+//                                for (Cliente cliente : clientesPagadores) {
+//                                        System.out.println("Ingrese la cantidad que desea pagar.");
+//                                        valor = readInt();
+//                                        if (valor > mesa.getValorTotal()) {
+//                                            System.out.println("El valor ingresado es mayor al valor de la factura.");
+//                                        } else {
+//                                            escogerMetodoPago(cliente);
+//                                            int valorFinalPersona = aplicarDescuentosCuenta(cliente, valor);
+//                                            if (mesa.getValorTotal() - valor - (valor - valorFinalPersona) >= 0){
+//                                                mesa.setValorTotal(mesa.getValorTotal() - valor - (valor - valorFinalPersona));
+//                                            } else {
+//                                                mesa.setValorTotal(0);
+//                                            }
+//                                            System.out.println("Se aplicaron descuentos por afiliación. El pago final fue: " + valorFinalPersona);
+//                                            System.out.println("El valor restante de la factura es: " + mesa.getValorTotal());
+//                                            }
+//                                    }
+//                                    System.out.println("La factura ha sido pagada.");
+//                                }else {
+//                                System.out.println("Cédula no válida.");
+//                                }
+//                            }
+//                        }while (mesa.getValorTotal() != 0);
                     }
                     encendido = false;
                     break;
