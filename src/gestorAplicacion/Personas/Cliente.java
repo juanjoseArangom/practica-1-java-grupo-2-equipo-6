@@ -19,7 +19,11 @@ public class Cliente extends Persona{
         this.afiliacion = afiliacion;
         this.placaVehiculo = placaVehiculo;
     }
-
+    public Cliente (String nombre, int cedula, String placaVehiculo){
+        super(nombre, cedula);
+        this.afiliacion = "Ninguna";
+        this.placaVehiculo = placaVehiculo;
+    }
     // Metodos
     public void mostrarInformacion(){
         System.out.println("Nombre: " + nombre);

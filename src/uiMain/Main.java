@@ -22,20 +22,25 @@ public class Main {
         zonas.add(new Zona(7426, "Aranjuez", ciudad1));
         zonas.add(new Zona(193134, "Kennedy", ciudad2));
 
+
         //Creamos mesas de muestra
         //Test funcionalidad 3
         Restaurante restaurante1 = new Restaurante();
         Mesa mesa1 = new Mesa(3, false);
         restaurante1.agregarMesa(mesa1);
+        mesa1.setRestaurante(restaurante1);
 
 
         //Creamos clientes de muestra para la mesa 1
         ArrayList <Cliente> clientesMesa1 = new ArrayList<Cliente>();
         Cliente cliente1 = new Cliente("Juan", 001, "Estrella", "1234567");
+        cliente1.setMesa(mesa1);
         clientesMesa1.add(cliente1);
         Cliente cliente2 = new Cliente("Pedro", 002, "Estrellita", "7654321");
+        cliente2.setMesa(mesa1);
         clientesMesa1.add(cliente2);
-        Cliente cliente3 = new Cliente("María", 003, null, "9876543");
+        Cliente cliente3 = new Cliente("María", 003, "9876543");
+        cliente3.setMesa(mesa1);
         clientesMesa1.add(cliente3);
         mesa1.setClientes(clientesMesa1);
 
@@ -445,102 +450,6 @@ public class Main {
                         }
 
                         System.out.println("La factura ha sido pagada.");
-//                        ArrayList<Cliente> clientesPagadores = new ArrayList<Cliente>(numeroPersonas);
-//                        do {
-//                            for (int j = 0; j < numeroPersonas + 1; j++) {
-//                                System.out.println("Ingrese la cédula de la persona que pagará la factura.");
-//                                cedula = readInt();  // Asegúrate de tener el método readInt() definido adecuadamente
-//
-//                                // Verificar si la cédula ingresada corresponde a algún cliente
-//                                boolean cedulaValida = false;
-//                                Cliente clientePagador = null;
-//                                for (Cliente cliente : mesa.getClientes()) {
-//                                    if (cliente.getCedula() == cedula) {
-//                                        cedulaValida = true;
-//                                        clientePagador = cliente;
-//                                        clientesPagadores.add(cliente);
-//                                        break;
-//                                    }
-//                                }
-//                                if (cedulaValida) {
-//                                    System.out.println("Ingrese la cantidad que desea pagar.");
-//                                    int valor = readInt();
-//                                    if (valor > mesa.getValorTotal()) {
-//                                        System.out.println("El valor ingresado es mayor al valor de la factura.");
-//                                    } else {
-//                                        escogerMetodoPago(clientePagador);
-//                                        int valorFinalPersona = aplicarDescuentosCuenta(clientePagador, valor);
-//                                        if (mesa.getValorTotal() - valor - (valor - valorFinalPersona) >= 0){
-//                                                mesa.setValorTotal(mesa.getValorTotal() - valor - (valor - valorFinalPersona));
-//                                        } else {
-//                                                mesa.setValorTotal(0);
-//                                        }
-//                                        System.out.println("El pago final fue: " + valorFinalPersona);
-//                                        System.out.println("El valor restante de la factura es: " + mesa.getValorTotal());
-//                                    }
-//                                } else {
-//                                    System.out.println("Cédula no válida.");
-//                                }
-//                            } if (mesa.getValorTotal() != 0){
-//                                System.out.println("La factura aún no ha sido pagada.");
-//                                System.out.println("Seleccione el cliente que pagará la factura.");
-//                                for (int i = 0; i < clientesPagadores.size(); i++) {
-//                                    System.out.println(i + 1 + ". " + clientesPagadores.get(i).getNombre());
-//                                }
-//                                int clienteAPagar = readInt();
-//                                System.out.println("Debe pagar el total restante de: " + mesa.getValorTotal());
-//                                System.out.println("¿Desea confirmar la transacción?");
-//                                System.out.println("""
-//                                        1. Sí.
-//                                        2. No.
-//                                        Escriba un número para elegir su opción.""");
-//                                int confirmacion = readInt();
-//                                switch (confirmacion) {
-//                                    case 1:
-//                                        System.out.println("Transacción confirmada.");
-//                                        mesa.setValorTotal(0);
-//                                        break;
-//                                    case 2:
-//
-//                                    default:
-//                                        System.out.println("Número no válido.");
-//                                        break;
-//                                }
-//                            }
-//                        } while (mesa.getValorTotal() > 0);
-//                        System.out.println("La factura ha sido pagada.");
-
-
-//                        do {
-//                        for (int j = 0; j < numeroPersonas - 1; j++) {
-//                            System.out.println("Ingrese la cédula de la persona que pagará la factura.");
-//                            cedula = readInt();
-//                            if (cedula == mesa.getClientes().get(j).getCedula()) {
-//                                clientesPagadores.add(mesa.getClientes().get(j));
-//                                int valor = 0;
-//                                for (Cliente cliente : clientesPagadores) {
-//                                        System.out.println("Ingrese la cantidad que desea pagar.");
-//                                        valor = readInt();
-//                                        if (valor > mesa.getValorTotal()) {
-//                                            System.out.println("El valor ingresado es mayor al valor de la factura.");
-//                                        } else {
-//                                            escogerMetodoPago(cliente);
-//                                            int valorFinalPersona = aplicarDescuentosCuenta(cliente, valor);
-//                                            if (mesa.getValorTotal() - valor - (valor - valorFinalPersona) >= 0){
-//                                                mesa.setValorTotal(mesa.getValorTotal() - valor - (valor - valorFinalPersona));
-//                                            } else {
-//                                                mesa.setValorTotal(0);
-//                                            }
-//                                            System.out.println("Se aplicaron descuentos por afiliación. El pago final fue: " + valorFinalPersona);
-//                                            System.out.println("El valor restante de la factura es: " + mesa.getValorTotal());
-//                                            }
-//                                    }
-//                                    System.out.println("La factura ha sido pagada.");
-//                                }else {
-//                                System.out.println("Cédula no válida.");
-//                                }
-//                            }
-//                        }while (mesa.getValorTotal() != 0);
                     }
                     encendido = false;
                     break;
@@ -551,9 +460,10 @@ public class Main {
                     for (Cliente cliente : mesa.getClientes()) {
                         if (cliente.getCedula() == cedulaCliente) {
                             escogerMetodoPago(cliente);
+                            int valorFinalFactura = aplicarDescuentosCuenta(cliente, mesa.getValorTotal());
                             boolean transaccionConfirmada = false;
                             do {
-                                System.out.println("¿Desea confirmar la transacción con un valor de: " + mesa.getValorTotal() + "?");
+                                System.out.println("¿Desea confirmar la transacción con un valor de: " + valorFinalFactura + "?");
                                 System.out.println("""
                                         1. Sí.
                                         2. No.
@@ -579,7 +489,6 @@ public class Main {
                         if (mesa.getValorTotal() == 0) {
                             System.out.println("La factura ha sido pagada. Esperamos que vuelvan pronto!!!");
                         }
-                        // aplicarBeneficios(UNICAMENTE AL CLIENTE QUE REALIZÓ EL PAGO){}
                         encendido = false;
                         break;
             }
@@ -752,12 +661,12 @@ public class Main {
                                 }
                             }
                         }
-                    } encendido = false;
+                    }
                     break;
                 case 2:
                     for (Cliente cliente : mesa.getClientes()){
-                        if (cliente.getAfiliacion() == null){
-                            System.out.println("¿Desea afiliarse?");
+                        if (cliente.getAfiliacion() == "Ninguna"){
+                            System.out.println("¿" + cliente.getNombre() + ", desea afiliarse?");
                             System.out.println("""
                                     1. Sí.
                                     2. No.
@@ -846,73 +755,70 @@ public class Main {
                                         default:
                                             System.out.println("Número no válido.");
                                             break;
-                                    } calificarRestaurante(mesa);
-                                    break;
+                                    }
                                 case 2:
                                     break;
                             }
-                        } else {
-                            calificarRestaurante(mesa);
-                        }
+                        } calificarRestaurante(cliente);
                     }
-            }
+            } break;
         } while (encendido);
+        mesa.setClientes(null);
+        for (Cliente cliente : mesa.getClientes()){
+            cliente.setMesa(null);
+        }
     }
 
-    public static void calificarRestaurante(Mesa mesa) {
-        for (Cliente cliente : mesa.getClientes()) {
-            System.out.println("Por favor califique el restaurante.");
-            System.out.println("Ingrese una calificación del 1 al 5.");
-            float calificacion = readFloat();
-            if (calificacion >= 1 && calificacion <= 5) {
+    public static void calificarRestaurante(Cliente cliente){
+        System.out.println("Por favor " + cliente.getNombre() + " califique el restaurante con una nota del 1 al 5.");
+        float calificacion = readFloat();
+        if (calificacion >= 1 && calificacion <= 5) {
+            System.out.println("Gracias por su calificación.");
+            cliente.getMesa().getRestaurante().setCalificacion(calificacion);
+        } else {
+            System.out.println("Ingrese una calificación válida.");
+        }
+        System.out.println("¿Desea añadir una reseña?");
+        System.out.println("""
+                1. Sí.
+                2. No.
+                Escriba un número para elegir su opción.""");
+        int eleccion = readInt();
+        switch (eleccion) {
+            case 1:
+                System.out.println("Por favor ingrese su reseña.");
+                String reseña = readString();
+                cliente.getMesa().getRestaurante().añadirReseña(reseña);
+                if (cliente.getAfiliacion() != null) {
+                    cliente.setPuntosAcumulados(cliente.getPuntosAcumulados() + 1);
+                    System.out.println("Gracias por su reseña. Obtuvo un punto extra por ayudarnos a mejorar.");
+                } else {
+                    System.out.println("Gracias por su reseña.");
+                }
+                break;
+            case 2:
+                break;
+            default:
+                System.out.println("Número no válido.");
+                break;
+        }
+        System.out.println("Ingrese una calificación para su plato entre 1 y 5.");
+        float calificacionPlato = readFloat();
+        for (Plato plato : cliente.getFactura().getPedido().getPlatos()) {
+            if (calificacionPlato >= 1 && calificacionPlato <= 5) {
+                if (calificacionPlato >= 4.5) {
+                    cliente.agregarPlatoFavorito(plato);
+                }
+                plato.setCalificacion(calificacionPlato);
                 System.out.println("Gracias por su calificación.");
-                mesa.getRestaurante().setCalificacion(calificacion);
+                actualizarPlatos(plato, cliente.getMesa());
+                actualizarMenu(cliente.getMesa());
             } else {
                 System.out.println("Ingrese una calificación válida.");
             }
-            System.out.println("¿Desea añadir una reseña?");
-            System.out.println("""
-                    1. Sí.
-                    2. No.
-                    Escriba un número para elegir su opción.""");
-            int eleccion = readInt();
-            switch (eleccion) {
-                case 1:
-                    System.out.println("Por favor ingrese su reseña.");
-                    String reseña = readString();
-                    mesa.getRestaurante().añadirReseña(reseña);
-                    if (cliente.getAfiliacion() != null) {
-                        cliente.setPuntosAcumulados(cliente.getPuntosAcumulados() + 1);
-                        System.out.println("Gracias por su reseña. Obtuvo un punto extra por ayudarnos a mejorar.");
-                    } else {
-                        System.out.println("Gracias por su reseña.");
-                    }
-                    break;
-                case 2:
-                    break;
-                default:
-                    System.out.println("Número no válido.");
-                    break;
-            }
-            System.out.println("Ingrese una calificación para su plato.");
-            System.out.println("Ingrese una calificación del 1 al 5.");
-            float calificacionPlato = readFloat();
-            for (Plato plato : cliente.getFactura().getPedido().getPlatos()) {
-                if (calificacionPlato >= 1 && calificacionPlato <= 5) {
-                    if (calificacionPlato >= 4.5) {
-                        cliente.agregarPlatoFavorito(plato);
-                    }
-                    plato.setCalificacion(calificacionPlato);
-                    System.out.println("Gracias por su calificación.");
-                    actualizarPlatos(plato, mesa);
-                    actualizarMenu(mesa);
-                } else {
-                    System.out.println("Ingrese una calificación válida.");
-                }
-            }
         }
-        mesa.setClientes(null);
     }
+
 
     // Interacción 3: actualizarRestaurante
     public static void actualizarPlatos(Plato platoCalificado, Mesa mesa){
@@ -1000,7 +906,7 @@ public class Main {
 
     public static int aplicarDescuentosCuenta(Cliente cliente, int valorPorPersona) {
         int valorFinal = 0;
-        if (cliente.getAfiliacion() != null) {
+        if (cliente.getAfiliacion() != "Ninguna") {
             valorFinal = valorPorPersona;
             System.out.println("Se aplicaron descuentos por su nivel de afiliación.");
             if (cliente.getAfiliacion().equals("Estrellita")) {
